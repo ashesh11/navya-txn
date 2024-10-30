@@ -30,3 +30,10 @@ class EmailLoginView(APIView):
             return Response({'error': 'Invalid Credentials'}, 400)
         access_token = generate_access_token(account)
         return Response(data={'data':access_token }, status=200)
+    
+    
+class UserProfileView(APIView):
+    def get(self, request):
+        account = request.user
+        data = UserAccountSerializer(account).data
+        return Response(data={'data': data}, status=200)
