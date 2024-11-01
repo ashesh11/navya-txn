@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 USER_ROLE_CHOICES = [
     ("none", "none"),
+    ("admin", "admin"),
     ("manager", "manager"),
     ("staff", "staff")
 ]
@@ -18,6 +19,7 @@ class UserAccountManager(BaseUserManager):
     def create_superuser(self, email, name, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("role", "admin")
 
         return self.create_user(email, name, password, **extra_fields)
 
