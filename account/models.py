@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
-USER_PERMISSION_CHOICES = [
+USER_ROLE_CHOICES = [
     ("none", "none"),
     ("manager", "manager"),
     ("staff", "staff")
@@ -24,7 +24,7 @@ class UserAccountManager(BaseUserManager):
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    permission = models.CharField(max_length=10, choices=USER_PERMISSION_CHOICES, default='none')
+    role = models.CharField(max_length=10, choices=USER_ROLE_CHOICES, default='none')
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
