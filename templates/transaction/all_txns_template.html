@@ -1,0 +1,30 @@
+{% extends "transaction/base.html" %}
+
+{% block title %}Transaction Report{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Amount</th>
+            <th>Transaction Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.txn_id }}</td>
+            <td>{{ transaction.name }}</td>
+            <td>{{ transaction.phone }}</td>
+            <td>{{ transaction.email }}</td>
+            <td>{{ transaction.amount|floatformat:2 }}</td>
+            <td>{{ transaction.transaction_date|date:"Y-m-d" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

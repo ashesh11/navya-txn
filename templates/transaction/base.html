@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Transaction Details{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h1 { text-align: center; }
+        .header { display: flex; align-items: center; justify-content: center; }
+            img { width: 80px; margin-right: 80px; }
+    </style>
+</head>
+<body>
+    <img src="{{ logo_path }}" alt="Logo" />
+    <h1>{% block report_title %}Transaction Report{% endblock %}</h1>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

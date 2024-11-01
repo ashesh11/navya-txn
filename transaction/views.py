@@ -1,7 +1,9 @@
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from transaction.services import TransactionServices
 from transaction.serializers import TransactionSerializer
+from transaction.utils import generate_transaction_pdf
 
 
 class TransactionListView(APIView):
@@ -53,3 +55,29 @@ class TransactionDetailView(APIView):
     def delete(self, request, txn_id):
         self.service.delete(txn_id=txn_id)
         return Response(status=200)
+    
+
+class AllTransactionPDFView(APIView):
+    service = TransactionServices()
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request):
+        txns = self.service.queryset
+        pdf = generate_transaction_pdf(txns, type='all')
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="transactions.pdf"'
+        return response
+
+
+class DetailTransactionPDFView(APIView):
+    service = TransactionServices()
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request, txn_id):
+        txn = self.service.retrieve(txn_id=txn_id)
+        pdf = generate_transaction_pdf(txn, type='detail')
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="transactions.pdf"'
+        return response
