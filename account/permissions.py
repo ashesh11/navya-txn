@@ -1,16 +1,16 @@
 from rest_framework.permissions import BasePermission
-from transaction.models import Transaction
+from account.models import UserAccount
 
 
 # Helper functions to check specific roles
 def is_manager(user_id):
-    return Transaction.objects.filter(user_id=user_id, role='manager').exists()
+    return UserAccount.objects.filter(id=user_id, role='manager').exists()
 
 def is_staff(user_id):
-    return Transaction.objects.filter(user_id=user_id, role='staff').exists()
+    return UserAccount.objects.filter(id=user_id, role='staff').exists()
 
 def is_manager_or_staff(user_id):
-    return Transaction.objects.filter(user_id=user_id, role__in=['staff', 'manager']).exists()
+    return UserAccount.objects.filter(id=user_id, role__in=['staff', 'manager']).exists()
 
 
 class BasePermissionHandler(BasePermission):

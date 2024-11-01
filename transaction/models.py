@@ -1,6 +1,10 @@
 from django.db import models
 
 
+TRANSACTION_APPROVE_STATUS_CHOICES = [
+    ('approved', 'approved'),
+    ('rejected', 'rejected')
+]
 class Transaction(models.Model):
     txn_id = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=100)
@@ -8,6 +12,7 @@ class Transaction(models.Model):
     email = models.EmailField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_date = models.DateField()
+    approve_status = models.CharField(max_length=20, choices=TRANSACTION_APPROVE_STATUS_CHOICES, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.txn_id:

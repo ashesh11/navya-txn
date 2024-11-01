@@ -62,7 +62,9 @@ class AllTransactionPDFView(APIView):
     authentication_classes = []
 
     def get(self, request):
-        txns = self.service.queryset
+        txns = self.service.queryset.filter(approve_status='approved')
+        if not txns:
+            return Response('No available/approved transactions to create PDF', status=204)
         pdf = generate_transaction_pdf(txns, type='all')
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="transactions.pdf"'
@@ -75,7 +77,9 @@ class DetailTransactionPDFView(APIView):
     authentication_classes = []
 
     def get(self, request, txn_id):
-        txn = self.service.retrieve(txn_id=txn_id)
+        txn = self.service.queryset.filter(txn_id=txn_id, approve_status='approved').first()
+        if not txn:
+            return Response('Transaction not available or rejected', status=204)
         pdf = generate_transaction_pdf(txn, type='detail')
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="transactions.pdf"'
