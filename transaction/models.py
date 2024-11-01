@@ -25,3 +25,6 @@ class Transaction(models.Model):
             self.txn_id = f"TXNID{new_id_number:04d}"  # Format with leading zeros
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.name}-{self.txn_id}'
