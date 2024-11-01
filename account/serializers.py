@@ -11,7 +11,8 @@ class EmailLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
-class UserAccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserAccount
-        fields = '__all__'
+class UserAccountSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    permission = serializers.CharField()
+    created_at = serializers.DateTimeField()
