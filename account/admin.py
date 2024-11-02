@@ -2,7 +2,6 @@ from django.contrib import admin, messages
 from account.models import UserAccount
 
 
-
 @admin.register(UserAccount)
 class UserAccountAdmin(admin.ModelAdmin):
     list_display = ['email', 'name', 'role']
