@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from transaction.services import TransactionServices
 from transaction.serializers import TransactionSerializer
 from transaction.utils import generate_transaction_pdf
+from account.authentication import AccountJWTAuthentication
 from account.permissions import TransactionListViewPermissionHandler, TransactionDetailViewPermissionHandler
 
 
@@ -58,8 +59,6 @@ class TransactionDetailView(APIView):
 
 class AllTransactionPDFView(APIView):
     service = TransactionServices()
-    permission_classes = []
-    authentication_classes = []
 
     def get(self, request):
         txns = self.service.queryset.filter(approve_status='approved')
@@ -73,8 +72,6 @@ class AllTransactionPDFView(APIView):
 
 class DetailTransactionPDFView(APIView):
     service = TransactionServices()
-    permission_classes = []
-    authentication_classes = []
 
     def get(self, request, txn_id):
         txn = self.service.queryset.filter(txn_id=txn_id, approve_status='approved').first()
