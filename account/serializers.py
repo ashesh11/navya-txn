@@ -14,5 +14,5 @@ class EmailLoginSerializer(serializers.Serializer):
 class UserAccountSerializer(serializers.Serializer):
     name = serializers.CharField()
     email = serializers.EmailField()
-    permission = serializers.CharField()
+    role = serializers.CharField()
     created_at = serializers.DateTimeField()

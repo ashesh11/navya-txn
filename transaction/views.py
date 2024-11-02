@@ -4,12 +4,13 @@ from rest_framework.response import Response
 from transaction.services import TransactionServices
 from transaction.serializers import TransactionSerializer
 from transaction.utils import generate_transaction_pdf
+from account.authentication import AccountJWTAuthentication
+from account.permissions import TransactionListViewPermissionHandler, TransactionDetailViewPermissionHandler
 
 
 class TransactionListView(APIView):
+    permission_classes = [TransactionListViewPermissionHandler]
     service = TransactionServices()
-    permission_classes = []
-    authentication_classes = []
 
     def get(self, request):
         transactions = self.service.list()
@@ -26,8 +27,7 @@ class TransactionListView(APIView):
 
 class TransactionDetailView(APIView):
     service = TransactionServices()
-    permission_classes = []
-    authentication_classes = []
+    permission_classes = [TransactionDetailViewPermissionHandler]
 
     def get(self, request, txn_id):
         txn = self.service.retrieve(txn_id=txn_id)
@@ -59,11 +59,11 @@ class TransactionDetailView(APIView):
 
 class AllTransactionPDFView(APIView):
     service = TransactionServices()
-    permission_classes = []
-    authentication_classes = []
 
     def get(self, request):
-        txns = self.service.queryset
+        txns = self.service.queryset.filter(approve_status='approved')
+        if not txns:
+            return Response('No available/approved transactions to create PDF', status=204)
         pdf = generate_transaction_pdf(txns, type='all')
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="transactions.pdf"'
@@ -72,11 +72,11 @@ class AllTransactionPDFView(APIView):
 
 class DetailTransactionPDFView(APIView):
     service = TransactionServices()
-    permission_classes = []
-    authentication_classes = []
 
     def get(self, request, txn_id):
-        txn = self.service.retrieve(txn_id=txn_id)
+        txn = self.service.queryset.filter(txn_id=txn_id, approve_status='approved').first()
+        if not txn:
+            return Response('Transaction not available or rejected', status=204)
         pdf = generate_transaction_pdf(txn, type='detail')
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="transactions.pdf"'
