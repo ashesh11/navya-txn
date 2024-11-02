@@ -1,7 +1,7 @@
 ### Project Setup
 
 1. **Install Dependencies**
-    - Install all required packages using:
+    - Install all the required packages using:
       ```bash
       pip install -r requirements.txt
       ```
